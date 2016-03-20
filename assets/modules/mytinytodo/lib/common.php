@@ -74,7 +74,7 @@ class Config
 		'mysql.password' => array('default'=>'', 'type'=>'s'),
 		'prefix' => array('default'=>'', 'type'=>'s'),
 		'url' => array('default'=>'', 'type'=>'s'),
-		'mtt_url' => array('default'=>'', 'type'=>'s'),
+		'mtt_url' => array('default'=>'/assets/modules/mytinytodo/lib/', 'type'=>'s'),
 		'title' => array('default'=>'', 'type'=>'s'),
 		'lang' => array('default'=>'en', 'type'=>'s'),
 		'password' => array('default'=>'', 'type'=>'s'),

@@ -6,6 +6,10 @@
 	Licensed under the GNU GPL v2 license. See file COPYRIGHT for details.
 */
 
+# Get Modx-config
+require_once('../../../../manager/includes/config.inc.php');
+// @todo: Get session and check mgrValidated === 1
+
 set_exception_handler('myExceptionHandler');
 
 # Check old config file (prior v1.3)
@@ -56,13 +60,15 @@ if(!$ver)
 	# Which DB to select
 	if(!isset($_POST['installdb']) && !isset($_POST['install']))
 	{
+                $dbase = str_replace('`', '', $dbase);
+
 		exitMessage("<form method=post>Select database type to use:<br><br>
 <label><input type=radio name=installdb value=sqlite checked=checked onclick=\"document.getElementById('mysqlsettings').style.display='none'\">SQLite</label><br><br>
 <label><input type=radio name=installdb value=mysql onclick=\"document.getElementById('mysqlsettings').style.display=''\">MySQL</label><br>
-<div id='mysqlsettings' style='display:none; margin-left:30px;'><br><table><tr><td>Host:</td><td><input name=mysql_host value=localhost></td></tr>
-<tr><td>Database:</td><td><input name=mysql_db value=mytinytodo></td></tr>
-<tr><td>User:</td><td><input name=mysql_user value=user></td></tr>
-<tr><td>Password:</td><td><input type=password name=mysql_password></td></tr>
+<div id='mysqlsettings' style='display:none; margin-left:30px;'><br><table><tr><td>Host:</td><td><input name=mysql_host value=\"{$database_server}\"></td></tr>
+<tr><td>Database:</td><td><input name=mysql_db value=\"{$dbase}\"></td></tr>
+<tr><td>User:</td><td><input name=mysql_user value=\"{$database_user}\"></td></tr>
+<tr><td>Password:</td><td><input name=mysql_password value=\"{$database_password}\" type=password></td></tr>
 <tr><td>Table prefix:</td><td><input name=prefix value=\"mtt_\"></td></tr>
 </table></div><br><input type=submit value=' Next '></form>");
 	}
@@ -84,6 +90,9 @@ if(!$ver)
 		if(!is_writable('./db/config.php')) {
 			exitMessage("Config file ('db/config.php') is not writable.");
 		}
+		// Modx
+		Config::set('mtt_url', '/assets/modules/mytinytodo/lib/');
+
 		Config::save();
 		exitMessage("This will create myTinyTodo database <form method=post><input type=hidden name=install value=1><input type=submit value=' Install '></form>");
 	}
@@ -226,7 +235,7 @@ if(!$ver)
 }
 elseif($ver == $lastVer)
 {
-	exitMessage("Installed version does not require database update.");
+	exitMessage("Installed version does not require database update.", true);
 }
 else
 {
@@ -264,9 +273,7 @@ else
 		update_131_14($db, $dbtype);
 	}
 }
-echo "Done<br><br> <b>Attention!</b> Delete this file for security reasons.";
-printFooter();
-
+exitMessage("Done", true);
 
 function get_ver($db, $dbtype)
 {
@@ -298,9 +305,16 @@ function get_ver($db, $dbtype)
 	return $v;
 }
 
-function exitMessage($s)
+function exitMessage($s, $success=false)
 {
 	echo $s;
+        if($success) {
+            if(rename(__FILE__, __FILE__.md5(rand(0,99999999999999)))) {
+                echo "<br><br> <b>Attention!</b> setup.php has been renamed for security reasons.";
+            } else {
+                echo "<br><br> <b>Attention!</b> setup.php could not be renamed. Rename or delete it for security reasons!";
+            }
+        }
 	printFooter();
 	exit;
 }

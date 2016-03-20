@@ -10,7 +10,9 @@ if(!defined('MTTPATH')) define('MTTPATH', dirname(__FILE__) .'/');
 require_once(MTTPATH. 'common.php');
 require_once(MTTPATH. 'db/config.php');
 
-ini_set('display_errors', 'On');
+# Modx
+$base_path = '';
+require(MTTPATH.'../../../../manager/includes/config.inc.php');
 
 if(!isset($config)) global $config;
 Config::loadConfig($config);
@@ -36,7 +38,7 @@ elseif(Config::get('db') == 'sqlite')
 }
 else {
 	# It seems not installed
-	die("Not installed. Run <a href=setup.php>setup.php</a> first.");
+	die('Not installed. Run <a href="/assets/modules/mytinytodo/lib/setup.php">setup.php</a> first.');
 }
 $db->prefix = Config::get('prefix');
 
@@ -67,10 +69,10 @@ if($needAuth && !isset($dontStartSession))
 	session_name('mtt-session');
 	session_start();
 }
-
 function is_logged()
 {
-	if(!isset($_SESSION['logged']) || !$_SESSION['logged']) return false;
+        // @todo: get modx-session ?
+        if(!isset($_SESSION['logged']) || !$_SESSION['logged']) return false;
 	return true;
 }
 
