@@ -1,7 +1,4 @@
-##  myTinyTodo for Modx Evolution v0.1
-Custom module using iFrame to install & embed myTinyTodo v1.4.3 into manager.
+##  myTinyTodo for Modx Evolution v0.2
+Custom module using iFrame to install & embed myTinyTodo v1.4.3 into manager. Uses Manager-session to validate login.
 
 Demo: http://www.mytinytodo.net/ 
-
-#### Todo
-- use Modx-session instead of iFrame-solution?

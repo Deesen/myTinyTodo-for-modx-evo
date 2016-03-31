@@ -12,7 +12,7 @@ $lang = Lang::instance();
 
 if($needAuth && !is_logged())
 {
-	die("Access denied!<br/> Disable password protection or Log in.");
+	die("Access denied!<br/> Please log into manager first.");
 }
 
 if(isset($_POST['save']))
@@ -29,9 +29,9 @@ if(isset($_POST['save']))
 		$t['saved'] = 1;
 		jsonExit($t);
 	}
-	
-	if(isset($_POST['password']) && $_POST['password'] != '') Config::set('password', $_POST['password']);
-	elseif(!_post('allowpassword')) Config::set('password', '');
+
+        Config::set('password', 'modxSession');
+    
 	Config::set('smartsyntax', (int)_post('smartsyntax'));
 	// Do not set invalid timezone
 	try {
@@ -160,18 +160,6 @@ header('Content-type:text/html; charset=utf-8');
 </tr>
 
 <tr>
-<th><?php _e('set_protection');?>:</th>
-<td>
- <label><input type="radio" name="allowpassword" value="1" <?php if(_c('password')!='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled",false)' /><?php _e('set_enabled');?></label> <br/>
- <label><input type="radio" name="allowpassword" value="0" <?php if(_c('password')=='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled","disabled")' /><?php _e('set_disabled');?></label> <br/>
-</td></tr>
-
-<tr>
-<th><?php _e('set_newpass');?>:<br/><span class="descr"><?php _e('set_newpass_descr');?></span></th>
-<td> <input type="password" name="password" <?php if(_c('password')=='') echo "disabled"; ?> /> </td>
-</tr>
-
-<tr>
 <th><?php _e('set_smartsyntax');?>:<br/><span class="descr"><?php _e('set_smartsyntax_descr');?></span></th>
 <td>
  <label><input type="radio" name="smartsyntax" value="1" <?php if(_c('smartsyntax')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
@@ -183,13 +171,6 @@ header('Content-type:text/html; charset=utf-8');
 <td>
  <label><input type="radio" name="autotag" value="1" <?php if(_c('autotag')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
  <label><input type="radio" name="autotag" value="0" <?php if(!_c('autotag')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
-</td></tr>
-
-<tr>
-<th><?php _e('set_sessions');?>:</th>
-<td>
- <label><input type="radio" name="session" value="default" <?php if(_c('session')=='default') echo 'checked="checked"'; ?> /><?php _e('set_sessions_php');?></label> <br/>
- <label><input type="radio" name="session" value="files" <?php if(_c('session')=='files') echo 'checked="checked"'; ?> /><?php _e('set_sessions_files');?></label> <span class="descr">(&lt;mytinytodo_dir&gt;/tmp/sessions)</span>
 </td></tr>
 
 <tr>

@@ -8,7 +8,6 @@
 
 # Get Modx-config
 require_once('../../../../manager/includes/config.inc.php');
-// @todo: Get session and check mgrValidated === 1
 
 set_exception_handler('myExceptionHandler');
 
@@ -31,9 +30,9 @@ if(!isset($config['db']))
 if($config['db'] != '') 
 {
 	require_once('./init.php');
-	if($needAuth && !is_logged())
+	if(!is_logged())
 	{
-		die("Access denied!<br> Disable password protection or Log in.");
+		die("Access denied!<br> Please log into manager first.");
 	}
 	$dbtype = (strtolower(get_class($db)) == 'database_mysql') ? 'mysql' : 'sqlite';
 }

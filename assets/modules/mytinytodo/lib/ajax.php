@@ -292,8 +292,8 @@ elseif(isset($_POST['login']))
 	$password = _post('password');
 	if($password == Config::get('password')) {
 		$t['logged'] = 1;
-		session_regenerate_id(1);
-		$_SESSION['logged'] = 1;
+                // session_regenerate_id(1);    // Dont kill Modx-session
+		// $_SESSION['logged'] = 1;
 	}
 	jsonExit($t);
 }

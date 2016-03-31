@@ -432,24 +432,6 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			$("#msg>.msg-details").toggle();
 		});
 
-
-		// Authorization
-		$('#bar_login').click(function(){
-			showAuth(this);
-			return false;
-		});
-
-		$('#bar_logout').click(function(){
-			logout();
-			return false;
-		});
-
-		$('#login_form').submit(function(){
-			doAuth(this);
-			return false;
-		});
-
-
 		// Settings
 		$("#settings").click(showSettings);
 		$("#settings_form").live('submit', function() {
@@ -2052,12 +2034,12 @@ function updateAccessStatus()
 	{
 		$('#bar_auth').show();
 		if(flag.isLogged) {
-			showhide($("#bar_logout"),$("#bar_login"));
+            $("#bar_login").hide();
 			$('#bar .menu-owner').show();
 			$('#bar .bar-delim').show();
 		}
 		else {
-			showhide($("#bar_login"),$("#bar_logout"));
+            $("#bar_login").show();
 			$('#bar .menu-owner').hide();
 			$('#bar .bar-delim').hide();
 		}
