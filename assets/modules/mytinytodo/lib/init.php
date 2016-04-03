@@ -55,7 +55,7 @@ $_mttinfo = array();
 $needAuth = (Config::get('password') != '') ? 1 : 0;
 if($needAuth && !isset($dontStartSession))
 {
-    startCMSSession();
+    if(!isset($_SESSION['modx.session.created.time'])) startCMSSession();
 }
 function is_logged()
 {
