@@ -21,7 +21,7 @@ class DatabaseResult_Mysql
 		$this->parent = $h;
 		$this->query = $query;
 
-		$this->q = mysql_query($query, $this->parent->dbh);
+		$this->q = mysqli_query($this->parent->dbh, $query);
 
 		if(!$this->q)
 		{
@@ -33,25 +33,25 @@ class DatabaseResult_Mysql
 	{
 		if(is_null($this->affected))
 		{
-			$this->affected = mysql_affected_rows($this->parent->dbh);
+			$this->affected = mysqli_affected_rows($this->parent->dbh);
 		}
 		return $this->affected;
 	}
 
 	function fetch_row()
 	{
-		return mysql_fetch_row($this->q);
+		return mysqli_fetch_row($this->q);
 	}
 
 	function fetch_assoc()
 	{
-		return mysql_fetch_assoc($this->q);
+		return mysqli_fetch_assoc($this->q);
 	}
 
 	function rows()
 	{
 		if (!is_null($this -> rows)) return $this->rows;
-		$this->rows = mysql_num_rows($this->q);
+		$this->rows = mysqli_num_rows($this->q);
 		return $this->rows;
 	}
 }
@@ -67,11 +67,11 @@ class Database_Mysql
 
 	function connect($host, $user, $pass, $db)
 	{
-		if(!$this->dbh = @mysql_connect($host,$user,$pass))
+		if(!$this->dbh = @mysqli_connect($host,$user,$pass))
 		{
-			throw new Exception(mysql_error());
+			throw new Exception(mysqli_connect_error());
 		}
-		if( @!mysql_select_db($db, $this->dbh) )
+		if( @!mysqli_select_db($this->dbh, $db) )
 		{
 			throw new Exception($this->error());
 		}
@@ -80,12 +80,12 @@ class Database_Mysql
 
 	function last_insert_id()
 	{
-		return mysql_insert_id($this->dbh);
+		return mysqli_insert_id($this->dbh);
 	}	
 	
 	function error()
 	{
-		return mysql_error($this->dbh);
+		return mysqli_error($this->dbh);
 	}
 
 	function sq($query, $p = NULL)
@@ -146,7 +146,7 @@ class Database_Mysql
 
 	function affected()
 	{
-		return	mysql_affected_rows($this->dbh);
+		return	mysqli_affected_rows($this->dbh);
 	}
 
 	function quote($s)
@@ -163,7 +163,7 @@ class Database_Mysql
 	function table_exists($table)
 	{
 		$table = addslashes($table);
-		$q = mysql_query("SELECT 1 FROM `$table` WHERE 1=0", $this->dbh);
+		$q = mysqli_query($this->dbh, "SELECT 1 FROM `$table` WHERE 1=0");
 		if($q === false) return false;
 		else return true;
 	}
